@@ -23,14 +23,21 @@ class WorldTime {
       String datetime = data['datetime'];
       String offsetHr = data['utc_offset'].substring(1, 3);
       String offsetMin = data['utc_offset'].substring(4,6);
+      String offsetSign = data['utc_offset'].substring(0,1);
+      // print(offsetSign);
       // print(datetime);
       // print(offsetMin);
 
       // create a date time object
       DateTime now = DateTime.parse(datetime);
-      now = now.add(Duration(hours: int.parse(offsetHr)));
-      now = now.add(Duration(minutes: int.parse(offsetMin)));
-
+      if(offsetSign == '+') {
+        now = now.add(Duration(hours: int.parse(offsetHr)));
+        now = now.add(Duration(minutes: int.parse(offsetMin)));
+      }
+      else{
+        now = now.subtract(Duration(hours: int.parse(offsetHr)));
+        now = now.subtract(Duration(minutes: int.parse(offsetMin)));
+      }
       isDay = now.hour > 6 && now.hour < 19 ? true : false;
       time = DateFormat.jm().format(now);
 
